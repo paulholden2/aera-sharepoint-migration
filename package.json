@@ -4,6 +4,7 @@
   "description": "Aera SharePoint Online migration",
   "main": "index.js",
   "scripts": {
+    "pkg": "pkg --targets=node10-win-x64 --output=build/aera-sharepoint-migration.exe",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Paul Holden",
@@ -14,5 +15,14 @@
     "dotenv": "^8.1.0",
     "sequelize": "^5.17.0",
     "tedious": "^6.3.0"
+  },
+  "devDependencies": {
+    "pkg": "^4.4.0"
+  },
+  "pkg": {
+    "scripts": "**/*.js",
+    "targets": [
+      "node10-win-x64"
+    ]
   }
 }

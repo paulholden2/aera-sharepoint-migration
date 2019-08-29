@@ -1,4 +1,5 @@
 const program = require('commander');
+require('tedious'); // Require for pkg to pick up dependency
 const Sequelize = require('sequelize');
 const SharePoint = require('@paulholden/sharepoint');
 const dotenv = require('dotenv');
