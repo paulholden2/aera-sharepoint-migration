@@ -43,11 +43,7 @@ sequelize.authenticate().then(res => {
     outputDirectory: process.env.DELIVERY_OUTPUT_DIR
   };
   let app = new Application(sequelize, sharepoint, program, options);
-  const code = await app.run();
-  if (program.debug) {
-    console.log(`Exited with code ${code}`);
-  }
-  return Promise.resolve(code);
+  return app.run();
 }).catch(err => {
   console.error(err);
 });
