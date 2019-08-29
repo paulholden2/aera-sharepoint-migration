@@ -3,7 +3,7 @@ require('tedious'); // Require for pkg to pick up dependency
 const Sequelize = require('sequelize');
 const SharePoint = require('@paulholden/sharepoint');
 const dotenv = require('dotenv');
-const orm = require('./lib/orm.js');
+const loadOrmModels = require('./lib/orm.js');
 const Application = require('./lib/application.js');
 
 // Load .env configuration
@@ -21,12 +21,15 @@ let sequelize = new Sequelize('Aera Energy', process.env.MSSQL_USERNAME, process
   dialect: 'mssql',
   logging: !!program.debug ? console.log : false
 });
-
 // SharePoint site
 let sharepoint = new SharePoint(process.env.SHAREPOINT_URL);
-
+let options = {
+  // Where the program will check for files to migrate
+  outputDirectory: process.env.DELIVERY_OUTPUT_DIR,
+  migrationTable: 'TestWellLogMigrations' // TODO
+};
 // Load ORM models
-let models = orm(sequelize);
+let models = loadOrmModels(sequelize, options);
 
 sequelize.authenticate().then(res => {
   // Leave force: false unless you want to summon hellfire
@@ -39,10 +42,6 @@ sequelize.authenticate().then(res => {
   if (program.ormOnly) {
     return Promise.resolve();
   }
-  let options = {
-    // Where the program will check for files to migrate
-    outputDirectory: process.env.DELIVERY_OUTPUT_DIR
-  };
   let app = new Application(sequelize, sharepoint, program, options);
   return app.run();
 }).catch(err => {
