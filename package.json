@@ -13,6 +13,7 @@
     "@paulholden/sharepoint": "^0.1.0",
     "commander": "^3.0.0",
     "dotenv": "^8.1.0",
+    "rc": "^1.2.8",
     "sequelize": "^5.17.0",
     "tedious": "^6.3.0"
   },

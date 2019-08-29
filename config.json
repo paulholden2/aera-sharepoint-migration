@@ -1,6 +1,0 @@
-{
-  "database": "Aera Energy",
-  "migrationTable": "Well Log Migrations",
-  "uploadChunkSize": 262144,
-  "uploadChunkThreshhold": 1e7
-}
