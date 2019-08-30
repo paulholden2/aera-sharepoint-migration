@@ -23,13 +23,30 @@ if (!conf.configs) {
   console.error('');
   console.error('Configurations are loaded in JSON or INI format.');
   console.error('Data is merged down; earlier configs override those that follow.');
+  console.error('');
+  console.error('Example configuration (JSON):');
+  console.error(`  {`);
+  console.error(`      "mssql": {`);
+  console.error(`        "username": "<DB username>",`);
+  console.error(`        "password": "<DB password>"`);
+  console.error(`      },`);
+  console.error(`      "sharepoint": {`);
+  console.error(`        "url": "https://aeraenergyllc.sharepoint.com/sites/centralfilesdemo",`);
+  console.error(`        "username": "<SharePoint username>",`);
+  console.error(`        "password": "<SharePoint password>"`);
+  console.error(`      },`);
+  console.error(`      "deliveryOutputDir": "\\\\storage1\\where\\the\\files\\are",`);
+  console.error(`      "migrationTable": "<DB table name>"`);
+  console.error(`    }`);
   return;
 }
 
 // Process commandline arguments
 program.option('-d, --debug', 'extra debugging output');
-program.option('-O, --orm-only', 'only sync ORM with database')
+program.option('-O, --orm-only', 'only sync ORM with database');
 program.option('-R, --retry-only', 'only retry failed migrations');
+program.option('-f, --force-uploads', 'upload documents even if they already exist');
+program.option('-w, --warn-missing', 'warn about files in load data that are missing');
 program.parse(process.argv);
 
 // Sequelize connection
@@ -44,7 +61,11 @@ let options = {
   // Where the program will check for files to migrate
   outputDirectory: conf.deliveryOutputDir,
   // The SQL table that will contain migrated file details
-  migrationTable: conf.migrationTable
+  migrationTable: conf.migrationTable,
+  // Should we log warnings for files missing from delivery folders but
+  // present in load files
+  warnMissing: program.warnMissing,
+  forceUploads: program.forceUploads
 };
 // Load ORM models
 let models = loadOrmModels(sequelize, options);
@@ -63,5 +84,5 @@ sequelize.authenticate().then(res => {
   let app = new Application(sequelize, sharepoint, program, options);
   return app.run();
 }).catch(err => {
-  console.error(err);
+  console.error(`ERROR: ${err}`);
 });
