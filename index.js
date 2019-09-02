@@ -36,15 +36,25 @@ if (!conf.configs) {
   console.error(`        "password": "<SharePoint password>"`);
   console.error(`      },`);
   console.error(`      "deliveryOutputDir": "\\\\storage1\\where\\the\\files\\are",`);
+  console.error(`      "deliveryTriggerSuffix": "_Ready To Deliver"`);
   console.error(`      "migrationTable": "<DB table name>"`);
   console.error(`    }`);
+  console.error('');
+  console.error('About configuration settings')
+  console.error(' - mssql.*: Microsoft SQL Server credentials.');
+  console.error(' - sharepoint.*: SharePoint site connection info and credentials.');
+  console.error(' - deliveryOutputDir: Where to look for delivery directories.');
+  console.error(' - deliveryTriggerSuffix: If delivery directories end with this string, the');
+  console.error('                          upload agent will process them.');
+  console.error(' - migrationTable: Name of the database table to log file upload details to.');
   return;
 }
 
 // Process commandline arguments
 program.option('-d, --debug', 'extra debugging output');
 program.option('-O, --orm-only', 'only sync ORM with database');
-program.option('-R, --retry-only', 'only retry failed migrations');
+program.option('-R, --retry-failed', 'retry failed migrations');
+program.option('-s, --stub-files', 'upload stub files instead of actual files (for testing/debugging)');
 program.option('-f, --force-uploads', 'upload documents even if they already exist');
 program.option('-w, --warn-missing', 'warn about files in load data that are missing');
 program.parse(process.argv);
@@ -62,10 +72,16 @@ let options = {
   outputDirectory: conf.deliveryOutputDir,
   // The SQL table that will contain migrated file details
   migrationTable: conf.migrationTable,
+  // What suffix to look for in directories to trigger processing
+  deliveryTriggerSuffix: conf.deliveryTriggerSuffix,
   // Should we log warnings for files missing from delivery folders but
   // present in load files
   warnMissing: program.warnMissing,
-  forceUploads: program.forceUploads
+  forceUploads: program.forceUploads,
+  // Should we use stub files instead of actuals (for debugging/testing)
+  stubFiles: program.stubFiles,
+  // Should failed migrations be retried?
+  retryFailed: program.retryFailed
 };
 // Load ORM models
 let models = loadOrmModels(sequelize, options);
@@ -81,7 +97,7 @@ sequelize.authenticate().then(res => {
   if (program.ormOnly) {
     return Promise.resolve();
   }
-  let app = new Application(sequelize, sharepoint, program, options);
+  let app = new Application(sequelize, models, sharepoint, program, options);
   return app.run();
 }).catch(err => {
   console.error(`ERROR: ${err}`);
