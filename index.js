@@ -57,6 +57,7 @@ program.option('-R, --retry-failed', 'retry failed migrations');
 program.option('-s, --stub-files', 'upload stub files instead of actual files (for testing/debugging)');
 program.option('-f, --force-uploads', 'upload documents even if they already exist');
 program.option('-w, --warn-missing', 'warn about files in load data that are missing');
+program.option('-p, --parallelize <count>', 'how many parallel tasks to run');
 program.parse(process.argv);
 
 // Sequelize connection
@@ -81,7 +82,8 @@ let options = {
   // Should we use stub files instead of actuals (for debugging/testing)
   stubFiles: program.stubFiles,
   // Should failed migrations be retried?
-  retryFailed: program.retryFailed
+  retryFailed: program.retryFailed,
+  parallelize: program.parallelize
 };
 // Load ORM models
 let models = loadOrmModels(sequelize, options);
