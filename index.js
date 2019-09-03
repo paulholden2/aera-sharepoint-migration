@@ -74,7 +74,7 @@ let options = {
   // The SQL table that will contain migrated file details
   migrationTable: conf.migrationTable,
   // What suffix to look for in directories to trigger processing
-  deliveryTriggerSuffix: conf.deliveryTriggerSuffix,
+  deliveryTriggerSuffix: conf.deliveryTriggerSuffix || "_Ready To Deliver",
   // Should we log warnings for files missing from delivery folders but
   // present in load files
   warnMissing: program.warnMissing,
