@@ -59,6 +59,7 @@ program.option('-s, --stub-files', 'upload stub files instead of actual files (f
 program.option('-f, --force-uploads', 'upload documents even if they already exist');
 program.option('-w, --warn-missing', 'warn about files in load data that are missing');
 program.option('-p, --parallelize <count>', 'how many parallel tasks to run');
+program.option('-S, --skip-uploads', 'skip all file uploads');
 program.parse(process.argv);
 
 // Sequelize connection
@@ -84,7 +85,8 @@ let options = {
   stubFiles: program.stubFiles,
   // Should failed migrations be retried?
   retryFailed: program.retryFailed,
-  parallelize: program.parallelize
+  parallelize: program.parallelize,
+  skipUploads: program.skipUploads
 };
 // Load ORM models
 let models = loadOrmModels(sequelize, options);
