@@ -13,7 +13,8 @@ if (!conf.configs) {
   console.error('No config files were found. Configuration is loaded from:');
   console.error('');
   console.error(' 1) Any file passed via --config argument');
-  console.error(` 2) Any .${APP}rc file found in local or parent directories`)
+  console.error(` 2) Any .${APP}rc file found in local or parent directories`);
+  console.error(`    * Note: not available for packaged binaries`);
   console.error(` 3) $HOME/.${APP}rc`);
   console.error(` 4) $HOME/.${APP}/config`);
   console.error(` 5) $HOME/.config/${APP}`);
