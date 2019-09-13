@@ -60,6 +60,7 @@ program.option('-f, --force-uploads', 'upload documents even if they already exi
 program.option('-w, --warn-missing', 'warn about files in load data that are missing');
 program.option('-p, --parallelize <count>', 'how many parallel tasks to run');
 program.option('-S, --skip-uploads', 'skip all file uploads');
+program.option('-I, --ignore-suffix', 'ignore delivery trigger suffix, always process delivery dirs');
 program.parse(process.argv);
 
 // Sequelize connection
@@ -86,7 +87,8 @@ let options = {
   // Should failed migrations be retried?
   retryFailed: program.retryFailed,
   parallelize: program.parallelize,
-  skipUploads: program.skipUploads
+  skipUploads: program.skipUploads,
+  ignoreDeliveryTriggerSuffix: program.ignoreSuffix
 };
 // Load ORM models
 let models = loadOrmModels(sequelize, options);
