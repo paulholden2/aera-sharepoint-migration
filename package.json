@@ -10,7 +10,7 @@
   "author": "Paul Holden",
   "license": "ISC",
   "dependencies": {
-    "@paulholden/sharepoint": "^0.1.6",
+    "@paulholden/sharepoint": "^0.1.7",
     "async": "^3.1.0",
     "commander": "^3.0.0",
     "csvjson": "^5.1.0",
