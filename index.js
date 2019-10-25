@@ -54,9 +54,10 @@ if (!conf.configs) {
 // Process commandline arguments
 program.option('-d, --debug', 'extra debugging output');
 program.option('-O, --orm-only', 'only sync ORM with database');
-program.option('-R, --retry-failed', 'retry failed migrations');
+program.option('-R, --retry-failed', 'retry failed or incomplete migrations');
 program.option('-s, --stub-files', 'upload stub files instead of actual files (for testing/debugging)');
 program.option('-f, --force-uploads', 'upload documents even if they already exist');
+program.option('-i, --ignore-migration', 'do not skip files that have already been migrated');
 program.option('-w, --warn-missing', 'warn about files in load data that are missing');
 program.option('-p, --parallelize <count>', 'how many parallel tasks to run');
 program.option('-S, --skip-uploads', 'skip all file uploads');
@@ -67,7 +68,7 @@ program.parse(process.argv);
 let sequelize = new Sequelize('Aera Energy', conf.mssql.username, conf.mssql.password, {
   host: 'STRIA-SQL1',
   dialect: 'mssql',
-  logging: !!program.debug ? console.log : false
+  logging: false //!!program.debug ? console.log : false
 });
 // SharePoint site
 let sharepoint = new SharePoint(conf.sharepoint.url);
@@ -78,6 +79,7 @@ let options = {
   migrationTable: conf.migrationTable,
   // What suffix to look for in directories to trigger processing
   deliveryTriggerSuffix: conf.deliveryTriggerSuffix || "_Ready To Deliver",
+  ignoreMigration: program.ignoreMigration,
   // Should we log warnings for files missing from delivery folders but
   // present in load files
   warnMissing: program.warnMissing,
