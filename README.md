@@ -42,7 +42,7 @@ A configuration file is required for this tool to run. Configuration files must 
     "password": "excelsior"
   },
   "deliveryOutputDir": "\\\\storage1\\where\\the\\files\\are",
-  "deliveryTriggerSuffix": "_Ready To Deliver"
+  "deliveryTriggerSuffix": "_Ready To Deliver",
   "migrationTable": "aerasp_file_log"
 }
 ```
