@@ -1,6 +1,16 @@
 # Aera SharePoint migration tool
 
-A command-line tool to deliver files from local storage to Aera's SharePoint site.
+A command-line tool to deliver files from local storage to Aera's SharePoint site. This tool is specifically designed for well files delivered in folders with a load file. The load file columns are (order does not matter):
+
+1. Filename
+2. API
+3. Document Type
+4. Date
+5. Well Name
+6. Field Name
+7. Township
+8. Range
+9. Section
 
 ## Getting started
 
